@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<a href="/logout">logout</a>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <div class="container">
+        <h1>Add new News for user</h1>
+        <form th:action="@{/save-news}" th:object="${obj}" method="post"
+              enctype="multipart/form-data">
+            <input type="text" th:field="*{comment}" placeholder="comment"/><br/><br/>
+            <input type="file" th:field="*{multipartFile}"/>
+            <br/><br/>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary form-control">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
+    <div class="container">
+        <div align="center"><h1>List fresh news</h1></div>
+        <div class="row" th:each="i : ${imgObj}">
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img th:src="@{${'/images/'+ i.imageName}}" width="500px" class="card-img-top" alt="Didn't choosed the imag">
+                    <div class="card-body">
+                        <p class="card-text" th:text="${i.comment}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
